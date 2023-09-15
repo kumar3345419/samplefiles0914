@@ -1,0 +1,288 @@
+<div class="Header" style="margin-left:350px">
+
+  Configure Column Schema Names
+
+</div>
+<br>
+<br>
+
+<div class="row content">
+  <div class="col-md-2 " style="margin-left:150px">
+    <label>Client Name&nbsp;</label>
+    <select [(ngModel)]="selectedCompanyName">
+      <option> uhc</option>
+      <option> fidelis</option>
+      <option> oah</option>
+      <option> morc</option>
+    </select>
+
+  </div>
+  <div class="col-md-2 ">
+    <label>Domain&nbsp;</label>
+
+    <select [(ngModel)]="selectedDomain">
+      <option> claims</option>
+      <option> member</option>
+      <option> mao</option>
+      <option> morc</option>
+
+    </select>
+  </div>
+  <div class="col-md-1 ">
+    <button (click)="search()">Search</button>
+  </div>
+  <div class="col-md-3 ">
+    <button (click)="add()">Add New Field</button>
+  </div>
+</div>
+
+<br>
+<div class="row content;" style="margin-left:120px" *ngIf="isSourceFieldsFound=='Y'">
+  <div class="container">
+    <div class="col-md-3" style="overflow-wrap: anywhere;color:blue">
+      <label>Source Field Name</label>
+    </div>
+    <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+      <label>Datatype</label>
+
+    </div>
+
+    <div class="col-md-1" style="overflow-wrap: anywhere;color:blue">
+      <label>Nullable</label>
+
+    </div>
+
+    <div *ngIf="IsfixedLengthPosition=='Y'">
+
+      <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+        <label>Start Position</label>
+      </div>
+
+      <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+
+        <label>End Position</label>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound=='Y'" style="margin-left:130px">
+  <div *ngFor="let d of dynamicRows">
+    <div class="col-md-3" [id]="d.id">
+
+      <!-- <input type="text" [value]="dynamicRows.sourceFieldName" /> -->
+    </div>
+    <div class="col-md-2">
+
+      <select [value]="d.dataTypes" [(ngModel)]="d.dataTypes">
+        <option value="str">String</option>
+        <option value="datetime">Date Time</option>
+        <option value="float">Float</option>
+        <option value="int">Int</option>
+      </select>
+    </div>
+
+    <div class="col-md-1">
+
+      <select [value]="d.nullable" [(ngModel)]="d.nullable">
+        <option value="Y">Yes</option>
+        <option value="N">No</option>
+      </select>
+    </div>
+    <div *ngIf="IsfixedLengthPosition=='Y'">
+
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" />
+
+      </div>
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" />
+      </div>
+
+
+    </div>
+
+
+    <div class="col-md-2" *ngIf="IsfixedLengthPosition=='Y'">
+      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+    </div>
+
+    <div class="col-md-6" *ngIf="IsfixedLengthPosition=='N'">
+      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+    </div>
+  </div>
+</div>
+<div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound=='Y'" style="margin-left:145px">
+
+  <button *ngIf="dynamicRows.length" (click)="save()">Save All</button>
+</div>
+
+<div class="row content" style="margin-left:120px" *ngIf="isSourceFieldsFound=='Y'">
+  <div class="container" *ngFor="let d of selectedRowDetails ; let i = index">
+    <div class="col-md-3" style="overflow-wrap: anywhere;">
+      <label>{{d.Col}}</label>
+    </div>
+    <div class="col-md-2 ">
+
+      <select [(ngModel)]="d.dtype">
+        <option value="str" [selected]="d.dtype =='str'">String</option>
+        <option value="datetime" [selected]="d.dtype =='datetime'">Date Time</option>
+        <option value="float" [selected]="d.dtype =='float'">Float</option>
+        <option value="int" [selected]="d.dtype =='int'">Int</option>
+      </select>
+    </div>
+    <div class="col-md-1">
+
+      <select>
+        <option value="N" [selected]="d.nullable =='N'">No</option>
+        <option value="Y" [selected]="d.nullable =='Y'">Yes</option>
+      </select>
+    </div>
+
+    <div *ngIf="d.position">
+
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" [value]="d.position[0]" />
+
+      </div>
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" [value]="d.position[1]" />
+      </div>
+
+
+    </div>
+    <div class="col-md-2">
+      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+    </div>
+
+  </div>
+  <div>
+    <button (click)="update()">Update</button>
+  </div>
+</div>
+
+<div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound==''Y" style="margin-left:135px">
+  &nbsp;
+
+</div>
+
+
+
+<div class="row content" style="margin-left:130px" *ngIf="addFlag=='N' &&isSourceFieldsFound=='N'  ">
+  <div class="col-md-12">
+    Config Schema names not found
+
+  </div>
+</div>
+
+<div class="row content" style="margin-left:130px" *ngIf="addFlag=='Y' && isSourceFieldsFound=='N'">
+
+
+  <div class="col-md-5" style="overflow-wrap: anywhere;color:blue">
+    <label>Source Field Name</label>
+  </div>
+  <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+    <label>Datatype</label>
+
+  </div>
+
+  <div class="col-md-1" style="overflow-wrap: anywhere;color:blue">
+    <label>Nullable</label>
+
+  </div>
+
+  <div *ngIf="IsfixedLengthPosition=='Y'">
+
+    <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+      <label>Start Position</label>
+    </div>
+
+    <div class="col-md-2" style="overflow-wrap: anywhere;color:blue">
+
+      <label>End Position</label>
+    </div>
+  </div>
+
+</div>
+
+<div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound=='N'" style="margin-left:130px">
+  <div *ngFor="let d of dynamicRows">
+
+    <div class="col-md-2" [id]="d.id" *ngIf="isCSVFile=='Y'">
+
+      <select style="width:150px" [(ngModel)]="d.sourceFieldName">
+        <option *ngFor="let h of csvHeaders"> {{h}}</option>
+
+      </select>
+
+    </div>
+
+
+    <div class="col-md-2" [id]="d.id" *ngIf="isCSVFile=='N'">
+
+      <input type="text" style="height:20px;width:100px" />
+    </div>
+    <div class="col-md-3" [id]="d.id" *ngIf="isCSVFile=='Y' && d.showFileLoad == true">
+      <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" (change)="fileChangeListener($event)"
+        accept=".csv" />
+    </div>
+
+    <div class="col-md-2">
+
+      <select [value]="d.dataTypes" [(ngModel)]="d.dataTypes">
+        <option value="str">String</option>
+        <option value="datetime">Date Time</option>
+        <option value="float">Float</option>
+        <option value="int">Int</option>
+      </select>
+    </div>
+
+    <div class="col-md-1">
+
+      <select [value]="d.nullable" [(ngModel)]="d.nullable">
+        <option value="Y">Yes</option>
+        <option value="N">No</option>
+      </select>
+    </div>
+    <div *ngIf="IsfixedLengthPosition=='Y'">
+
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" />
+
+      </div>
+      <div class="col-md-2">
+
+        <input type="text" style="height:20px;width:100px" />
+      </div>
+
+
+    </div>
+
+
+
+    <div class="col-md-4" *ngIf="IsfixedLengthPosition=='Y'">
+      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+    </div>
+
+    <div class="col-md-4" *ngIf="IsfixedLengthPosition=='N'">
+      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+    </div>
+
+  </div>
+</div>
+<div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound=='N'" style="margin-left:145px">
+  <button *ngIf="dynamicRows.length" (click)="save()">Save All</button>
+</div>
+
+
+
+<br />
+
+
+
+<br />    
