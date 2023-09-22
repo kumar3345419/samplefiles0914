@@ -135,7 +135,7 @@
     </div>
     <div class="col-md-1">
 
-      <select>
+      <select >
         <option value="N" [selected]="d.nullable =='N'">No</option>
         <option value="Y" [selected]="d.nullable =='Y'">Yes</option>
       </select>
@@ -156,7 +156,7 @@
 
     </div>
     <div class="col-md-2">
-      <button style="height:21px" (click)="delete(d.id)">Delete</button>
+      <button style="height:21px" (click)="deleteAPIData(d)">Delete</button>
     </div>
 
   </div>
@@ -277,6 +277,10 @@
 </div>
 <div class="row content" *ngIf="addFlag=='Y' && isSourceFieldsFound=='N'" style="margin-left:145px">
   <button *ngIf="dynamicRows.length" (click)="save()">Save All</button>
+</div>
+
+<div class="col-md-6 fix">
+  <ngx-json-viewer [json]="selectedRowDetailsNew" style="height: 500px;"></ngx-json-viewer>
 </div>
 
 
